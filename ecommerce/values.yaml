@@ -1,0 +1,23 @@
+namespace: ecommerce
+
+userService:
+  name: user-service
+  image: vicky1710/user-service:1.0
+  port: 3000
+  replicas: 2
+
+productService:
+  name: product-service
+  image: product-service:1.0
+  port: 3001
+  replicas: 2
+
+orderService:
+  name: order-service
+  image: order-service:1.0
+  port: 3002
+  replicas: 2
+
+ingress:
+  enabled: true
+  host: ecommerce.local

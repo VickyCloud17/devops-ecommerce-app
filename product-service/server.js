@@ -9,6 +9,10 @@ app.get("/api/users", (req, res) => {
   res.json([{ id: 1, name: "Demo User" }]);
 });
 
+app.get('/', (req, res) => {
+  res.send('Product service is running');
+});
+
 app.listen(3001, () => {
-  console.log("User service running on port 3001");
+  console.log("Product service running on port 3001");
 });
