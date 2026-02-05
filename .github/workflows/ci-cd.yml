@@ -58,4 +58,4 @@ jobs:
 
       - name: Deploy with Helm
         run: |
-          helm upgrade --install ecommerce ./ecommerce -n ecommerce --create-namespace
+          helm upgrade --install ecommerce ./ecommerce -n ecommerce 
