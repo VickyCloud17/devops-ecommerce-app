@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,15 +33,29 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/user-service:1.0
           docker push ${{ secrets.DOCKER_USERNAME }}/product-service:1.0
           docker push ${{ secrets.DOCKER_USERNAME }}/order-service:1.0
-      jobs:
-     deploy:
-      runs-on: ubuntu-latest
-     steps:
-      # ... previous steps ...
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v1
+
       - name: Set up kubeconfig
-        run: echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
-        
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+
       - name: Deploy with Helm
         run: |
-          helm upgrade --install ecommerce ./ecommerce -n ecommerce
-
+          helm upgrade --install ecommerce ./ecommerce -n ecommerce --create-namespace
